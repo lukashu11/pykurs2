@@ -5,21 +5,20 @@ import matplotlib.pyplot as plt
 
 # load different datasets
 olist_orders = pd.read_csv(
-    r'C:\Users\lhube\OneDrive - hs-pforzheim.de\HS Pforzheim\WS2021\Python Kurs II\archive\olist_orders_dataset.csv')
+    './data/olist_orders_dataset.csv', encoding='utf-8')
 olist_order_items = pd.read_csv(
-    r'C:\Users\lhube\OneDrive - hs-pforzheim.de\HS Pforzheim\WS2021\Python Kurs II\archive\olist_order_items_dataset.csv')
+    './data/olist_order_items_dataset.csv', encoding='utf-8')
 olist_order_reviews = pd.read_csv(
-    r'C:\Users\lhube\OneDrive - hs-pforzheim.de\HS Pforzheim\WS2021\Python Kurs II\archive\olist_order_reviews_dataset.csv')
+    './data/olist_order_reviews_dataset.csv', encoding='utf-8')
 olist_order_payments = pd.read_csv(
-    r'C:\Users\lhube\OneDrive - hs-pforzheim.de\HS Pforzheim\WS2021\Python Kurs II\archive\olist_order_payments_dataset.csv')
+    './data/olist_order_payments_dataset.csv', encoding='utf-8')
 olist_customers = pd.read_csv(
-    r'C:\Users\lhube\OneDrive - hs-pforzheim.de\HS Pforzheim\WS2021\Python Kurs II\archive\olist_customers_dataset.csv')
+    './data/olist_customers_dataset.csv', encoding='utf-8')
 olist_geolocation = pd.read_csv(
-    r'C:\Users\lhube\OneDrive - hs-pforzheim.de\HS Pforzheim\WS2021\Python Kurs II\archive\olist_geolocation_dataset.csv')
-# olist_sellers = pd.read_csv(
-    # r'C:\Users\lhube\OneDrive - hs-pforzheim.de\HS Pforzheim\WS2021\Python Kurs II\archive\olist_sellers_dataset.csv')
+    './data/olist_geolocation_dataset.csv', encoding='utf-8')
 olist_products = pd.read_csv(
-    r'C:\Users\lhube\OneDrive - hs-pforzheim.de\HS Pforzheim\WS2021\Python Kurs II\archive\olist_products_dataset.csv')
+    './data/olist_products_dataset.csv', encoding='utf-8')
+
 
 # explore olist orders and order items
 # print(olist_orders.describe())
