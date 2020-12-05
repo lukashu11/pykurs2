@@ -33,7 +33,7 @@ def merge_calc_cols(df_to_merge, join_key):
 
 
 def split_data(df):
-    ## Get X and y
+    # Get X and y
     X = df.drop(columns=['order_status_canceled']).values
     y = df['order_status_canceled'].values
 
@@ -68,7 +68,7 @@ def plot_2d_space(X, y, label='Classes'):
     plt.show()
 
 
-def implement_oversampling(X_train, y_train):
+def implement_oversampling(X, X_train, y_train):
     ros = RandomOverSampler()
     X_ros, y_ros = ros.fit_sample(X_train, y_train)
     print(X_ros.shape[0] - X.shape[0], 'new random picked points')

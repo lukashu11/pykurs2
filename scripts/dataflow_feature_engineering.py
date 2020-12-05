@@ -1,5 +1,6 @@
 import pandas as pd
-from source.components.feature_engineering import calc_mean, calc_count, join_dfs, merge_calc_cols, split_data, plot_2d_space, implement_oversampling
+from source.components.feature_engineering import calc_mean, calc_count, join_dfs, merge_calc_cols, split_data, \
+    plot_2d_space, implement_oversampling
 
 # load different datasets needed
 olist_orders = pd.read_csv(
@@ -35,7 +36,6 @@ avg_calc_order_items = calc_mean(olist_order_items[[
         'freight_value': 'avg_freight_value',
         'product_name_lenght': 'avg_product_name_length',
         'product_description_lenght': 'avg_product_description_length',
-        'product_name_lenght': 'avg_product_name_length',
         'product_photos_qty': 'avg_product_photos_qty',
         'product_weight_g': 'avg_product_weight_g',
         'product_length_cm': 'avg_product_length_cm',
@@ -79,5 +79,5 @@ X, y, X_train, X_test, y_train, y_test, explained_variance = split_data(churn)
 plot_2d_space(X, y, 'Imbalanced dataset (2 PCA components)')
 
 # visualize data after oversampling
-X_ros, y_ros = implement_oversampling(X_train, y_train)
+X_ros, y_ros = implement_oversampling(X, X_train, y_train)
 plot_2d_space(X_ros, y_ros, 'Random over-sampling')
