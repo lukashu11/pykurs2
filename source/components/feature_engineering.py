@@ -1,5 +1,9 @@
 import pandas as pd
 from functools import reduce
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+
 
 def calc_count(df, groupkey, dict):
     df = df.groupby(groupkey).count().reset_index()
