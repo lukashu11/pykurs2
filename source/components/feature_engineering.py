@@ -27,8 +27,8 @@ def merge_calc_cols(df_to_merge, join_key):
 def split_data(df):
 
     ## Get X and y
-    X = df.drop(columns=['is_canceled', 'order_hour_minute_second', 'order_year_month_day']).values
-    y = df['is_canceled'].values
+    X = df.drop(columns=['order_status_cancelled']).values
+    y = df['order_status_cancelled'].values
 
     #train_test_split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1, stratify=y, shuffle=True)
