@@ -2,6 +2,8 @@
 
 Advanced Data Science and Machine Learning Project
 
+dataset: https://www.kaggle.com/olistbr/brazilian-ecommerce
+
 This project aims to predict order cancellations within the brazilian Olist eCommerce dataset.
 Following a binary classification approach based on existing order data with the target variable "order status",
 a prediction on new data should be enabled. Therefore possible order cancellations could be detected and classified early on and countermeasures could be set up to reduce or prevent them.
