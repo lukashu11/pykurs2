@@ -1,8 +1,11 @@
 import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
 from functools import reduce
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+from imblearn.over_sampling import RandomOverSampler
 
 
 def calc_count(df, groupkey, dict):
@@ -28,13 +31,13 @@ def merge_calc_cols(df_to_merge, join_key):
     df = df.dropna()
     return df
 
-def split_data(df):
 
+def split_data(df):
     ## Get X and y
     X = df.drop(columns=['order_status_canceled']).values
     y = df['order_status_canceled'].values
 
-    #train_test_split
+    # train_test_split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1, stratify=y, shuffle=True)
 
     # Feature Scaling (normalizing the data)
@@ -48,4 +51,25 @@ def split_data(df):
     X_test = pca.transform(X_test)
 
     explained_variance = pca.explained_variance_ratio_
-    return X_train, X_test, y_train, y_test, explained_variance
+    return X, y, X_train, X_test, y_train, y_test, explained_variance
+
+
+def plot_2d_space(X, y, label='Classes'):
+    colors = ['#1F77B4', '#FF7F0E']
+    markers = ['o', 's']
+    for l, c, m in zip(np.unique(y), colors, markers):
+        plt.scatter(
+            X[y == l, 0],
+            X[y == l, 1],
+            c=c, label=l, marker=m
+        )
+    plt.title(label)
+    plt.legend(loc='upper right')
+    plt.show()
+
+
+def implement_oversampling(X_train, y_train):
+    ros = RandomOverSampler()
+    X_ros, y_ros = ros.fit_sample(X_train, y_train)
+    print(X_ros.shape[0] - X.shape[0], 'new random picked points')
+    return X_ros, y_ros
