@@ -19,13 +19,14 @@ olist_products = pd.read_csv(
 
 
 def main():
-    X_ros, y_ros, X_test, y_test = feature_engineering(olist_orders, olist_order_items, olist_products, olist_order_payments, olist_order_reviews,
-                        olist_customers)
+    X_ros, y_ros, X_test, y_test = feature_engineering(olist_orders, olist_order_items, olist_products,
+                                                       olist_order_payments, olist_order_reviews,
+                                                       olist_customers)
 
     classification_report = classification(X_ros, y_ros, X_test, y_test)
     return classification_report
 
 
 if __name__ == "__main__":
-    print('Classification results are prepared ...')
+    print('Preparing Classification Report...')
     main()
