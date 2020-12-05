@@ -1,5 +1,6 @@
 import pandas as pd
-from source.components.dataflow_feature_engineering import calc_mean,calc_count,join_dfs,merge_calc_cols
+from source.components.feature_engineering import calc_mean, calc_count, join_dfs, merge_calc_cols, split_data
+
 
 # load different datasets needed
 olist_orders = pd.read_csv(
@@ -16,7 +17,6 @@ olist_geolocation = pd.read_csv(
     './data/olist_geolocation_dataset.csv', encoding='utf-8')
 olist_products = pd.read_csv(
     './data/olist_products_dataset.csv', encoding='utf-8')
-
 
 # get target variable and drop not needed columns from olist_orders
 churn = olist_orders[olist_orders['order_status'].isin(['canceled', 'delivered'])]
@@ -42,7 +42,6 @@ avg_calc_order_items = calc_mean(olist_order_items[[
         'product_length_cm': 'avg_product_length_cm',
         'product_height_cm': 'avg_product_height_cm',
         'product_width_cm': 'avg_product_width_cm'})
-
 
 olist_order_payments_reduced = olist_order_payments[['order_id', 'payment_type']]
 
@@ -71,4 +70,8 @@ churn['customer_state'] = churn['customer_state'].astype('category')
 churn['payment_type'] = churn['payment_type'].astype('category')
 
 # get dummies from categorical columns
-churn = pd.get_dummies(data=churn, columns=['order_status', 'customer_state', 'payment_type']).drop(columns=['order_status_delivered'])
+churn = pd.get_dummies(data=churn, columns=['order_status', 'customer_state', 'payment_type']).drop(
+    columns=['order_status_delivered'])
+
+#reduce dimensions via PCA and get train_test_split
+X_train, X_test, y_train, y_test, explained_variance = split_data(churn)
