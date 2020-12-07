@@ -1,6 +1,8 @@
 import pandas as pd
 from source.dataflows.dataflow import feature_engineering, classification
 
+#TODO: "src" nicht "source!"
+
 # load different datasets needed
 olist_orders = pd.read_csv(
     './data/olist_orders_dataset.csv', encoding='utf-8')
@@ -26,6 +28,7 @@ def main():
     classification_report = classification(X_ros, y_ros, X_test, y_test)
     return classification_report
 
+#TODO: keine prediction...
 
 if __name__ == "__main__":
     print('Preparing Classification Report...')

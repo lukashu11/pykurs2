@@ -14,10 +14,10 @@ def calc_count(df, groupkey, dict):
     df = df.rename(columns=dict)
     return df
 
-
-def calc_mean(df, groupkey, dict):
+#TODO: "dict" ist kein guter Name!
+def calc_mean(df, groupkey, column_list):
     df = df.groupby(groupkey).mean().reset_index()
-    df = df.rename(columns=dict)
+    df = df.rename(columns={l: 'avg_' + l for l in list})
     return df
 
 
@@ -32,7 +32,7 @@ def merge_calc_cols(df_to_merge, join_key):
     df = df.dropna()
     return df
 
-
+#TODO: Das hier macht ja wohl noch mehr als splitting: PCA, etc. Also ist der Name der function falsch. Das sind eigentlcih mindestens drei "components"
 def split_data(df):
     # Get X and y
     X = df.drop(columns=['order_status_canceled']).values
