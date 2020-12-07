@@ -83,10 +83,10 @@ def implement_oversampling(X, X_train, y_train):
 
 def split_new_data(df):
     # Get 5 samples of each classification option
-    df = df.head(20)
+    new_data_df = df.head(500)
     # Get X as numpy array
-    new_data = df.drop(columns=['order_status_canceled']).values
-    return new_data
+    new_data_array = new_data_df.drop(columns=['order_status_canceled']).values
+    return new_data_array, new_data_df
 
 
 def scale_features_new_data(new_data):

@@ -1,5 +1,7 @@
 import pandas as pd
 import pickle
+from pandas import DataFrame
+
 from src.components.classification import rf_classification, pred_report
 from src.components.feature_engineering import calc_mean, calc_count, join_dfs, merge_calc_cols, split_data, \
     plot_2d_space, implement_oversampling, scale_features, reduce_dimensions, split_new_data, scale_features_new_data, \
@@ -141,16 +143,18 @@ def flow_new_data(olist_orders, olist_order_items, olist_products, olist_order_p
         columns=['order_status_delivered'])
 
     # split data
-    new_data = split_new_data(churn)
+    new_data_array, new_data_df = split_new_data(churn)
 
     # scale features (normalize data)
-    new_data = scale_features_new_data(new_data)
+    new_data_array = scale_features_new_data(new_data_array)
 
     # reduce dimensions via PCA
-    new_data, explained_variance = reduce_dimensions_new_data(new_data)
+    new_data_array, explained_variance = reduce_dimensions_new_data(new_data_array)
 
     # predict cancellations for new data
     model = pickle.load(open(model_path, 'rb'))
-    y_pred_new = model.predict(new_data)
-    return y_pred_new
+    y_pred_new = model.predict(new_data_array)
+    new_data_df = DataFrame(new_data_df)
+    new_data_df['prediction_canceled'] = y_pred_new
+    return print(new_data_df)
 
