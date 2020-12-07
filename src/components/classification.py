@@ -16,3 +16,6 @@ def pred_report(model, X_test, y_test):
     print(cm)
     print('Accuracy' + str(accuracy_score(y_test, y_pred)))
     print(f1_score(y_test, y_pred, average="macro"))
+
+
+

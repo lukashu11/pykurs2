@@ -8,7 +8,6 @@ from sklearn.decomposition import PCA
 from imblearn.over_sampling import RandomOverSampler
 
 
-
 def calc_count(df, groupkey, dict):
     df = df.groupby(groupkey).count().reset_index()
     df = df.rename(columns=dict)
@@ -40,19 +39,25 @@ def split_data(df):
 
     # train_test_split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1, stratify=y, shuffle=True)
+    return X, y, X_train, X_test, y_train, y_test
 
+
+def scale_features(X_train, X_test):
     # Feature Scaling (normalizing the data)
     sc = StandardScaler()
     X_train = sc.fit_transform(X_train)
     X_test = sc.transform(X_test)
+    return X_train, X_test
 
+
+def reduce_dimensions(X_train, X_test):
     # Feature Engineering -  PCA for dimension reduction (Real coordinate space: metric/ binary)
     pca = PCA(n_components=2)
     X_train = pca.fit_transform(X_train)
     X_test = pca.transform(X_test)
 
     explained_variance = pca.explained_variance_ratio_
-    return X, y, X_train, X_test, y_train, y_test, explained_variance
+    return X_train, X_test, explained_variance
 
 
 def plot_2d_space(X, y, label='Classes'):
@@ -74,3 +79,27 @@ def implement_oversampling(X, X_train, y_train):
     X_ros, y_ros = ros.fit_sample(X_train, y_train)
     print(X_ros.shape[0] - X.shape[0], 'new random picked points')
     return X_ros, y_ros
+
+
+def split_new_data(df):
+    # get 5 samples of each classification option
+    df = df[df['order_status cancelled'] == 1].head(5) + df[df['order_status cancelled'] == 0].head(5)
+    # Get X and y
+    X = df.drop(columns=['order_status_canceled']).values
+    y = df['order_status_canceled'].values
+    return X, y
+
+
+def scale_features_new_data(X):
+    # Feature Scaling (normalizing the data)
+    sc = StandardScaler()
+    X = sc.fit_transform(X)
+    return X
+
+
+def reduce_dimensions_new_data(X):
+    # Feature Engineering -  PCA for dimension reduction (Real coordinate space: metric/ binary)
+    pca = PCA(n_components=2)
+    X = pca.fit_transform(X)
+    explained_variance = pca.explained_variance_ratio_
+    return X, explained_variance

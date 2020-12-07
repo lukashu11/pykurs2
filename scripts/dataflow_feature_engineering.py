@@ -1,6 +1,6 @@
 import pandas as pd
-from source.components.feature_engineering import calc_mean, calc_count, join_dfs, merge_calc_cols, split_data, \
-    plot_2d_space, implement_oversampling
+from src.components.feature_engineering import calc_mean, calc_count, join_dfs, merge_calc_cols, split_data, \
+    plot_2d_space, implement_oversampling, scale_features, reduce_dimensions
 
 # load different datasets needed
 olist_orders = pd.read_csv(
@@ -72,8 +72,14 @@ churn['payment_type'] = churn['payment_type'].astype('category')
 churn = pd.get_dummies(data=churn, columns=['order_status', 'customer_state', 'payment_type']).drop(
     columns=['order_status_delivered'])
 
-# normalize data, reduce to two dimensions via PCA and get train_test_split
-X, y, X_train, X_test, y_train, y_test, explained_variance = split_data(churn)
+# split data via train_test_split
+X, y, X_train, X_test, y_train, y_test = split_data(churn)
+
+# scale features (normalize data)
+X_train, X_test = scale_features(X_train, X_test)
+
+# reduce dimensions via PCA
+X_train, X_test, explained_variance = reduce_dimensions(X_train, X_test)
 
 # visualize imbalanced data
 plot_2d_space(X, y, 'Imbalanced dataset (2 PCA components)')
