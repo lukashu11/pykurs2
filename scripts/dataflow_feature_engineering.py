@@ -26,12 +26,12 @@ churn = churn.drop(columns=['order_approved_at', 'order_delivered_carrier_date',
 # join in ald calculate needed columns from different dataframes
 olist_order_items = join_dfs(olist_order_items, olist_products, join_key=['product_id'], drop_nan=['product_id'])
 count_order_items = calc_count(olist_order_items[['order_id', 'product_id']], groupkey=['order_id'],
-                               dict={'product_id': 'count_order_items'})
+                               dict_rename={'product_id': 'count_order_items'})
 avg_calc_order_items = calc_mean(olist_order_items[[
     'order_id', 'price', 'freight_value', 'product_name_lenght', 'product_description_lenght', 'product_name_lenght',
     'product_photos_qty',
     'product_weight_g', 'product_length_cm', 'product_height_cm', 'product_width_cm']],
-                                 groupkey=['order_id'], dict={
+                                 groupkey=['order_id'], dict_rename={
         'price': 'avg_price',
         'freight_value': 'avg_freight_value',
         'product_name_lenght': 'avg_product_name_length',
@@ -45,12 +45,12 @@ avg_calc_order_items = calc_mean(olist_order_items[[
 olist_order_payments_reduced = olist_order_payments[['order_id', 'payment_type']]
 
 count_calc_reviews = calc_count(olist_order_reviews[['order_id', 'review_comment_message', 'review_score']],
-                                groupkey='order_id', dict={
+                                groupkey='order_id', dict_rename={
         'review_comment_message': 'count_product_comments',
         'review_score': 'count_product_ratings'})
 
 avg_calc_ratings = calc_mean(olist_order_reviews[['order_id', 'review_score']], groupkey='order_id',
-                             dict={'review_score': 'avg_rating'})
+                             dict_rename={'review_score': 'avg_rating'})
 
 df_to_merge = [churn, count_order_items, avg_calc_order_items, olist_order_payments_reduced, count_calc_reviews,
                avg_calc_ratings]

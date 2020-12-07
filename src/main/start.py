@@ -1,5 +1,5 @@
 import pandas as pd
-from src.dataflows.dataflow import feature_engineering, rf_classification_model, rf_prediction, feature_engineering_new_data
+from src.dataflows.dataflow import flow_new_data, flow_train_data
 
 # load different datasets needed
 olist_orders = pd.read_csv(
@@ -19,19 +19,16 @@ olist_products = pd.read_csv(
 
 
 def main():
-    X_ros, y_ros, X_test, y_test = feature_engineering(olist_orders, olist_order_items, olist_products,
+    rf_report = flow_train_data(olist_orders, olist_order_items, olist_products,
                                                        olist_order_payments, olist_order_reviews,
-                                                       olist_customers)
-    model = rf_classification_model(X_ros, y_ros)
-    classification_report_test_data = rf_prediction(model, X_test, y_test)
-
-    X, y = feature_engineering_new_data(olist_orders, olist_order_items, olist_products,
+                                                       olist_customers, path='./data/rf_model.pkl')
+    new_data = flow_new_data(olist_orders, olist_order_items, olist_products,
                                                        olist_order_payments, olist_order_reviews,
-                                                       olist_customers)
+                                                       olist_customers, model_path='./data/rf_model.pkl')
 
-    return classification_report_test_data, classification_new_data
+    return rf_report, new_data
 
 
 if __name__ == "__main__":
-    print('Preparing Classification Report...')
+    print('Preparing Classification Report and Prediction of new input data...')
     main()

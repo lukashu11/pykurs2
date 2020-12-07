@@ -8,15 +8,15 @@ from sklearn.decomposition import PCA
 from imblearn.over_sampling import RandomOverSampler
 
 
-def calc_count(df, groupkey, dict):
-    df = df.groupby(groupkey).count().reset_index()
-    df = df.rename(columns=dict)
+def calc_count(df, groupkey, rename_dict):
+    df = df.groupby(groupkey).count()
+    df = df.rename(columns=rename_dict)
     return df
 
 
-def calc_mean(df, groupkey, dict):
-    df = df.groupby(groupkey).mean().reset_index()
-    df = df.rename(columns=dict)
+def calc_mean(df, groupkey, rename_dict):
+    df = df.groupby(groupkey).mean()
+    df = df.rename(columns=rename_dict)
     return df
 
 
@@ -82,24 +82,23 @@ def implement_oversampling(X, X_train, y_train):
 
 
 def split_new_data(df):
-    # get 5 samples of each classification option
-    df = df[df['order_status cancelled'] == 1].head(5) + df[df['order_status cancelled'] == 0].head(5)
-    # Get X and y
-    X = df.drop(columns=['order_status_canceled']).values
-    y = df['order_status_canceled'].values
-    return X, y
+    # Get 5 samples of each classification option
+    df = df.head(20)
+    # Get X as numpy array
+    new_data = df.drop(columns=['order_status_canceled']).values
+    return new_data
 
 
-def scale_features_new_data(X):
+def scale_features_new_data(new_data):
     # Feature Scaling (normalizing the data)
     sc = StandardScaler()
-    X = sc.fit_transform(X)
-    return X
+    new_data = sc.fit_transform(new_data)
+    return new_data
 
 
-def reduce_dimensions_new_data(X):
+def reduce_dimensions_new_data(new_data):
     # Feature Engineering -  PCA for dimension reduction (Real coordinate space: metric/ binary)
     pca = PCA(n_components=2)
-    X = pca.fit_transform(X)
+    new_data = pca.fit_transform(new_data)
     explained_variance = pca.explained_variance_ratio_
-    return X, explained_variance
+    return new_data, explained_variance
