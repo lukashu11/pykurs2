@@ -1,5 +1,5 @@
 import pandas as pd
-from src.dataflows.dataflow import flow_new_data, flow_train_data
+from src.project.dataflow import flow_new_data, flow_train_data
 
 # load different datasets needed
 olist_orders = pd.read_csv(
