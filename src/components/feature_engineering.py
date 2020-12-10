@@ -6,17 +6,26 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from imblearn.over_sampling import RandomOverSampler
+from functools import partial
 
 
-def calc_count(df_count_calc, groupkey, rename_dict):
+def calc_count(df_count_calc, groupkey):
     df_count_calc = df_count_calc.groupby(groupkey).count()
-    df_count_calc = df_count_calc.rename(columns=rename_dict)
+
+    def col_to_rename(col, x):
+        return x + col
+
+    df_count_calc = df_count_calc.rename(mapper=partial(col_to_rename, x='count_'), axis='columns')
     return df_count_calc
 
 
-def calc_mean(df_mean_calc, groupkey, rename_dict):
+def calc_mean(df_mean_calc, groupkey):
     df_mean_calc = df_mean_calc.groupby(groupkey).mean()
-    df_mean_calc = df_mean_calc.rename(columns=rename_dict)
+
+    def col_to_rename(col, x):
+        return x + col
+
+    df_mean_calc = df_mean_calc.rename(mapper=partial(col_to_rename, x='mean_'), axis='columns')
     return df_mean_calc
 
 
