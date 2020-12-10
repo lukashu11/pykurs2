@@ -8,34 +8,34 @@ from sklearn.decomposition import PCA
 from imblearn.over_sampling import RandomOverSampler
 
 
-def calc_count(df, groupkey, rename_dict):
-    df = df.groupby(groupkey).count()
-    df = df.rename(columns=rename_dict)
-    return df
+def calc_count(df_count_calc, groupkey, rename_dict):
+    df_count_calc = df_count_calc.groupby(groupkey).count()
+    df_count_calc = df_count_calc.rename(columns=rename_dict)
+    return df_count_calc
 
 
-def calc_mean(df, groupkey, rename_dict):
-    df = df.groupby(groupkey).mean()
-    df = df.rename(columns=rename_dict)
-    return df
+def calc_mean(df_mean_calc, groupkey, rename_dict):
+    df_mean_calc = df_mean_calc.groupby(groupkey).mean()
+    df_mean_calc = df_mean_calc.rename(columns=rename_dict)
+    return df_mean_calc
 
 
 def join_dfs(df_left, df_right, join_key, drop_nan):
-    df = pd.merge(df_left, df_right, on=join_key, how='left')
-    df = df.dropna(subset=drop_nan)
-    return df
+    df_joined = pd.merge(df_left, df_right, on=join_key, how='left')
+    df_joined = df_joined.dropna(subset=drop_nan)
+    return df_joined
 
 
 def merge_calc_cols(df_to_merge, join_key):
-    df = reduce(lambda left, right: pd.merge(left, right, on=join_key, how='left'), df_to_merge)
-    df = df.dropna()
-    return df
+    df_merged = reduce(lambda left, right: pd.merge(left, right, on=join_key, how='left'), df_to_merge)
+    df_merged = df_merged.dropna()
+    return df_merged
 
 
-def split_data(df):
+def split_data(df_for_split):
     # Get X and y
-    X = df.drop(columns=['order_status_canceled']).values
-    y = df['order_status_canceled'].values
+    X = df_for_split.drop(columns=['order_status_canceled']).values
+    y = df_for_split['order_status_canceled'].values
 
     # train_test_split
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1, stratify=y, shuffle=True)
@@ -81,9 +81,9 @@ def implement_oversampling(X, X_train, y_train):
     return X_ros, y_ros
 
 
-def split_new_data(df):
+def split_new_data(new_data_df):
     # Get 5 samples of each classification option
-    new_data_df = df.head(500)
+    new_data_df = new_data_df.head(500)
     # Get X as numpy array
     new_data_array = new_data_df.drop(columns=['order_status_canceled']).values
     return new_data_array, new_data_df
