@@ -8,3 +8,5 @@
 out
 gen
 '.idea'
+*.pyc
+data/rf_model.pkl
