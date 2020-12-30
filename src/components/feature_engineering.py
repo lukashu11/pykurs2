@@ -16,6 +16,10 @@ def calc_count(df_count_calc, groupkey):
         return x + col
 
     df_count_calc = df_count_calc.rename(mapper=partial(col_to_rename, x='count_'), axis='columns')
+
+    # TODO: Hier lieber ein lambda verwenden und ein partial ist zwar cool, aber hier ziemlich overkill:
+    # df_count_calc = df_count_calc.rename(mapper=lambda col: 'count_' + col, axis='columns')
+
     return df_count_calc
 
 

@@ -8,12 +8,18 @@ from src.components.feature_engineering import calc_mean, calc_count, join_dfs, 
     reduce_dimensions_new_data
 
 
-def flow_train_data(olist_orders, olist_order_items, olist_products, olist_order_payments, olist_order_reviews,
-                        olist_customers, path:str):
+def flow_train_data(olist_orders,
+                    olist_order_items,
+                    olist_products,
+                    olist_order_payments,
+                    olist_order_reviews,
+                    olist_customers,
+                    path:str):
     churn = olist_orders[olist_orders['order_status'].isin(['canceled', 'delivered'])]
     churn = churn.drop(columns=['order_approved_at', 'order_delivered_carrier_date', 'order_delivered_customer_date',
                                 'order_estimated_delivery_date'])
 
+    # TODO: Ich hätte diese kleinen Komponenten zu einer größeren gebaut (Geschmacksfrage)
     # join in ald calculate needed columns from different dataframes
     olist_order_items = join_dfs(olist_order_items, olist_products, join_key=['product_id'], drop_nan=['product_id'])
     count_order_items = calc_count(olist_order_items[['order_id', 'product_id']], groupkey=['order_id'])
@@ -31,22 +37,27 @@ def flow_train_data(olist_orders, olist_order_items, olist_products, olist_order
 
     df_to_merge = [churn, count_order_items, avg_calc_order_items, olist_order_payments_reduced, count_calc_reviews,
                    avg_calc_ratings]
+
+    # TODO: nicht den gleichen namen 'churn' wie oben verwenden!
     churn = merge_calc_cols(df_to_merge, join_key=['order_id'])
 
     churn = join_dfs(churn, olist_customers[['customer_id', 'customer_state', 'customer_city']],
                      join_key=['customer_id'],
                      drop_nan=['customer_id'])
 
+    # TODO: hier als "flow" darstellen:
     # set order_id as index
-    churn = churn.set_index('order_id').dropna().drop(
-        columns=['order_purchase_timestamp', 'customer_id', 'customer_city']).drop_duplicates()
-
-    # transform to categorical dtype
-    churn = churn.astype({'order_status': 'category', 'customer_state': 'category', 'payment_type': 'category'})
+    churn = (churn.
+             set_index('order_id').
+             dropna().
+             drop(columns=['order_purchase_timestamp', 'customer_id', 'customer_city']).
+             drop_duplicates().
+             astype({'order_status': 'category', 'customer_state': 'category', 'payment_type': 'category'})  # transform to categorical dtype
+             )
 
     # get dummies from categorical columns
-    churn = pd.get_dummies(data=churn, columns=['order_status', 'customer_state', 'payment_type']).drop(
-        columns=['order_status_delivered'])
+    churn = pd.get_dummies(data=churn, columns=['order_status', 'customer_state', 'payment_type']).\
+        drop(columns=['order_status_delivered'])
 
     # split data via train_test_split
     X, y, X_train, X_test, y_train, y_test = split_data(churn)
@@ -60,6 +71,7 @@ def flow_train_data(olist_orders, olist_order_items, olist_products, olist_order
     # visualize imbalanced data
     plot_2d_space(X, y, 'Imbalanced dataset (2 PCA components)')
 
+    # TODO: das Wort 'implement' ist unnötig - natürlich implemeniteren Sie hier etwas:
     # visualize data after oversampling
     X_ros, y_ros = implement_oversampling(X, X_train, y_train)
     plot_2d_space(X_ros, y_ros, 'Random over-sampling')
@@ -71,6 +83,8 @@ def flow_train_data(olist_orders, olist_order_items, olist_products, olist_order
 
     return rf_report
 
+
+# TODO: in 'flow_new_data' haben Sie einfach code von oben heruntergeholt: Das hätten Sie in einer eigenen Funktion auslagern und von flow_new_data und flow_train_data aufrufen sollen
 
 def flow_new_data(olist_orders, olist_order_items, olist_products, olist_order_payments,
                                  olist_order_reviews,
